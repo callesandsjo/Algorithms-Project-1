@@ -14,17 +14,17 @@ class PriorityQueue
         PriorityQueue();
         void enqueue(T element);
         void dequeue();
-        T peek();
-        size_t size();
-        bool isEmpty();
+        T peek() const;
+        size_t size() const;
+        bool isEmpty() const;
         ~PriorityQueue();
 };
 
 template<typename T>
 PriorityQueue<T>::PriorityQueue()
-    : sizeOfArr(0), capacity(16)
+    : sizeOfArr(0), capacity(256)
 {
-    this->priorityArray = new T[128];
+    this->priorityArray = new T[256]; 
 }
 
 template<typename T>
@@ -33,11 +33,12 @@ void PriorityQueue<T>::enqueue(T element)
     ++sizeOfArr;
     if(sizeOfArr >= capacity-1)
     {
-        T *tempArray = new T[capacity*128];
+        T *tempArray = new T[capacity*2];
         for(unsigned int i = FIRST_INDEX; i < capacity; i++)
         {
             tempArray[i] = priorityArray[i];
         }
+        capacity = capacity*2;
         delete this->priorityArray;
         this->priorityArray = tempArray;
     }
@@ -54,37 +55,53 @@ void PriorityQueue<T>::enqueue(T element)
 template<typename T>
 void PriorityQueue<T>::dequeue()
 {
-    --sizeOfArr;
-    unsigned int index = FIRST_INDEX;
-    while(true) //ska ändras
+    if(isEmpty())
+        throw "Empty Queue";
+    else
     {
-        if(priorityArray[2*index] > priorityArray[2*index + 1])
+        unsigned int index = FIRST_INDEX;
+        T element = priorityArray[sizeOfArr];
+        priorityArray[index] = element;
+        --sizeOfArr;
+        while((2*index < sizeOfArr && priorityArray[index] > priorityArray[2*index]) || (2*index+1 < sizeOfArr && priorityArray[index] > priorityArray[2*index+1]))
         {
-            priorityArray[index] = priorityArray[2*index + 1];
-            index = 2*index + 1;
-        }
-        else
-        {
-            priorityArray[index] = priorityArray[2*index];
-            index = 2*index;
+            if(priorityArray[2*index] < priorityArray[2*index+1])
+            {
+                priorityArray[index] = priorityArray[2*index];
+                priorityArray[2*index] = element;
+                index = 2*index;
+            }
+            else if(priorityArray[2*index] > priorityArray[2*index+1] )
+            {
+                priorityArray[index] = priorityArray[2*index+1];
+                priorityArray[2*index+1] = element;
+                index = 2*index+1;
+            }
+            else
+            {
+                break;
+            }
+            
         }
     }
 }
 
 template<typename T>
-T PriorityQueue<T>::peek()
+T PriorityQueue<T>::peek() const
 {
+    if(isEmpty())
+        throw "Empty Queue";
     return this->priorityArray[FIRST_INDEX];
 }
 
 template<typename T>
-size_t PriorityQueue<T>::size()
+size_t PriorityQueue<T>::size() const
 {
     return this->sizeOfArr;
 }
 
 template<typename T>
-bool PriorityQueue<T>::isEmpty()
+bool PriorityQueue<T>::isEmpty() const
 {
     return !sizeOfArr;
 }

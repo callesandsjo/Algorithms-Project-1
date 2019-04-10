@@ -22,4 +22,5 @@ int main(int argc, const char *argv[])
         std::cout << "\nUnit tests failed on one or more tests." << std::endl;
         std::cout << "Please note that all tests must pass for your submission to be assessed." << std::endl;
     }
+    std::cin.get();
 }

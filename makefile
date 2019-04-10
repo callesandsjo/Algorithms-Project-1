@@ -22,7 +22,7 @@ all: $(EXECUTABLE)
 $(EXECUTABLE): $(BUILD)Tests.o
 	$(CPP) $(CPPFLAGS) $(BUILD)Tests.o -o $(EXECUTABLE)
 
-$(BUILD)Tests.o: $(SOURCE)Tests.cpp $(INCLUDES)TestingBase.hpp $(INCLUDES)TestPriorityQueue.hpp $(INCLUDES)PriorityQueue.h
+$(BUILD)Tests.o: $(SOURCE)Tests.cpp $(INCLUDES)TestingBase.hpp $(INCLUDES)TestPriorityQueue.hpp
 	$(CPP) $(CPPFLAGS) -c $(SOURCE)Tests.cpp -I$(INCLUDES) -o $(BUILD)Tests.o
 
 clean:
