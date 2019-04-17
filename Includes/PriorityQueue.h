@@ -3,6 +3,8 @@
 
 #define FIRST_INDEX 1
 
+#include <utility>
+
 template<typename T>
 class PriorityQueue
 {
@@ -30,26 +32,26 @@ PriorityQueue<T>::PriorityQueue()
 template<typename T>
 void PriorityQueue<T>::enqueue(T element)
 {
-    ++sizeOfArr;
-    if(sizeOfArr >= capacity-1)
+    ++this->sizeOfArr;
+    if(this->sizeOfArr >= this->capacity-1)
     {
-        T *tempArray = new T[capacity*2];
-        for(unsigned int i = FIRST_INDEX; i < capacity; i++)
+        T *tempArray = new T[this->capacity*2];
+        for(unsigned int i = FIRST_INDEX; i < this->capacity; i++)
         {
-            tempArray[i] = priorityArray[i];
+            tempArray[i] = this->priorityArray[i];
         }
-        capacity = capacity*2;
+        this->capacity = this->capacity*2;
         delete this->priorityArray;
         this->priorityArray = tempArray;
     }
     
     unsigned int index = sizeOfArr;
-    while((index > FIRST_INDEX) && (priorityArray[index/2] > element))
+    while((index > FIRST_INDEX) && (this->priorityArray[index/2] > element))
     {
-        priorityArray[index] = priorityArray[index/2];
+        this->priorityArray[index] = this->priorityArray[index/2];
         index = index/2;
     }
-    priorityArray[index] = element;
+    this->priorityArray[index] = element;
 }
 
 template<typename T>
@@ -60,28 +62,24 @@ void PriorityQueue<T>::dequeue()
     else
     {
         unsigned int index = FIRST_INDEX;
-        T element = priorityArray[sizeOfArr];
-        priorityArray[index] = element;
-        --sizeOfArr;
-        while((2*index < sizeOfArr && priorityArray[index] > priorityArray[2*index]) || (2*index+1 < sizeOfArr && priorityArray[index] > priorityArray[2*index+1]))
+        this->priorityArray[index] = this->priorityArray[this->sizeOfArr];
+        T element = this->priorityArray[index];
+        --this->sizeOfArr;
+        while((2*index < this->sizeOfArr && this->priorityArray[index] > this->priorityArray[2*index]) ||
+              (2*index+1 < this->sizeOfArr && this->priorityArray[index] > this->priorityArray[2*index+1]))
         {
-            if(priorityArray[2*index] < priorityArray[2*index+1])
+            if(this->priorityArray[2*index] <= this->priorityArray[2*index+1])
             {
-                priorityArray[index] = priorityArray[2*index];
-                priorityArray[2*index] = element;
+                this->priorityArray[index] = this->priorityArray[2*index];
+                this->priorityArray[2*index] = element;
                 index = 2*index;
-            }
-            else if(priorityArray[2*index] > priorityArray[2*index+1] )
-            {
-                priorityArray[index] = priorityArray[2*index+1];
-                priorityArray[2*index+1] = element;
-                index = 2*index+1;
             }
             else
             {
-                break;
+                this->priorityArray[index] = this->priorityArray[2*index+1];
+                this->priorityArray[2*index+1] = element;
+                index = 2*index+1;
             }
-            
         }
     }
 }
