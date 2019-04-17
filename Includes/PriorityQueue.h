@@ -3,8 +3,6 @@
 
 #define FIRST_INDEX 1
 
-#include <utility>
-
 template<typename T>
 class PriorityQueue
 {
@@ -48,10 +46,12 @@ void PriorityQueue<T>::enqueue(T element)
     unsigned int index = sizeOfArr;
     while((index > FIRST_INDEX) && (this->priorityArray[index/2] > element))
     {
+        
         this->priorityArray[index] = this->priorityArray[index/2];
         index = index/2;
     }
     this->priorityArray[index] = element;
+
 }
 
 template<typename T>
@@ -68,7 +68,7 @@ void PriorityQueue<T>::dequeue()
         while((2*index < this->sizeOfArr && this->priorityArray[index] > this->priorityArray[2*index]) ||
               (2*index+1 < this->sizeOfArr && this->priorityArray[index] > this->priorityArray[2*index+1]))
         {
-            if(this->priorityArray[2*index] <= this->priorityArray[2*index+1])
+            if(this->priorityArray[2*index] < this->priorityArray[2*index+1])
             {
                 this->priorityArray[index] = this->priorityArray[2*index];
                 this->priorityArray[2*index] = element;
