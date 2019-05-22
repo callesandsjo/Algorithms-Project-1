@@ -14,11 +14,15 @@ class PriorityQueue
         PriorityQueue();
         void enqueue(T element);
         void dequeue();
+
         T peek() const;
         size_t size() const;
         bool isEmpty() const;
         ~PriorityQueue();
 };
+
+
+//public functions
 
 template<typename T>
 PriorityQueue<T>::PriorityQueue()
@@ -31,10 +35,10 @@ template<typename T>
 void PriorityQueue<T>::enqueue(T element)
 {
     ++this->sizeOfArr;
-    if(this->sizeOfArr >= this->capacity-1)
+    if(this->capacity < this->sizeOfArr)
     {
         T *tempArray = new T[this->capacity*2];
-        for(unsigned int i = FIRST_INDEX; i < this->capacity; i++)
+        for(unsigned int i = FIRST_INDEX; i < this->sizeOfArr+1; i++)
         {
             tempArray[i] = this->priorityArray[i];
         }
@@ -44,7 +48,7 @@ void PriorityQueue<T>::enqueue(T element)
     }
     
     unsigned int index = sizeOfArr;
-    while((index > FIRST_INDEX) && (this->priorityArray[index/2] > element))
+    while((FIRST_INDEX < index) && (element < this->priorityArray[index/2]))
     {
         
         this->priorityArray[index] = this->priorityArray[index/2];
@@ -53,6 +57,7 @@ void PriorityQueue<T>::enqueue(T element)
     this->priorityArray[index] = element;
 
 }
+
 
 template<typename T>
 void PriorityQueue<T>::dequeue()
@@ -65,8 +70,8 @@ void PriorityQueue<T>::dequeue()
         this->priorityArray[index] = this->priorityArray[this->sizeOfArr];
         T element = this->priorityArray[index];
         --this->sizeOfArr;
-        while((2*index < this->sizeOfArr && this->priorityArray[index] > this->priorityArray[2*index]) ||
-              (2*index+1 < this->sizeOfArr && this->priorityArray[index] > this->priorityArray[2*index+1]))
+        while((2*index+1 < this->sizeOfArr && this->priorityArray[2*index+1] < this->priorityArray[index]) ||
+            (2*index < this->sizeOfArr && this->priorityArray[2*index] < this->priorityArray[index])) //starts evaluating 2*index+1 because of lazy evaluation
         {
             if(this->priorityArray[2*index] < this->priorityArray[2*index+1])
             {
@@ -107,7 +112,7 @@ bool PriorityQueue<T>::isEmpty() const
 template<typename T>
 PriorityQueue<T>::~PriorityQueue()
 {
-    delete this->priorityArray;
+    delete[] this->priorityArray;
 }
 
 #endif
